@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szózat Kvíz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        .quiz-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .answers {
+            list-style-type: none;
+            padding: 0;
+        }
+        .answers li {
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .correct {
+            color: lightgreen;
+        }
+        .incorrect {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Szózat Kvíz</h1>
+        <form id="quizForm">
+            <div class="question" data-correct="időmértékes">
+                <p>Milyen a verselése a Szózatnak?</p>
+                <ul class="answers">
+                    <li><input type="radio" id="q1a1" name="question1" value="időmértékes">Időmértékes</li>
+                    <li><input type="radio" id="q1a2" name="question1" value="szabad vers">Szabad vers</li>
+                    <li><input type="radio" id="q1a3" name="question1" value="rím nélküli">Rím nélküli</li>
+                </ul>
+            </div>
+            <div class="question" data-correct="Egressy Béni">
+                <p>Ki zenésítette meg?</p>
+                <ul class="answers">
+                    <li><input type="radio" id="q2a1" name="question2" value="Egressy Béni">Egressy Béni</li>
+                    <li><input type="radio" id="q2a2" name="question2" value="Kodály Zoltán">Kodály Zoltán</li>
+                    <li><input type="radio" id="q2a3" name="question2" value="Bartók Béla">Bartók Béla</li>
+                </ul>
+            </div>
+            <div class="question" data-correct="Auróra almanach">
+                <p>Hol jelent meg a hazafias óda?</p>
+                <ul class="answers">
+                    <li><input type="radio" id="q3a1" name="question3" value="Auróra almanach">Auróra almanach</li>
+                    <li><input type="radio" id="q3a2" name="question3" value="Vihar">Vihar</li>
+                    <li><input type="radio" id="q3a3" name="question3" value="Fővárosi Lapok">Fővárosi Lapok</li>
+                </ul>
+            </div>
+            <div class="question" data-correct="Zalán futása">
+                <p>Melyik honfoglalás eposzát emlegetik a nemzet ébresztőjeként?</p>
+                <ul class="answers">
+                    <li><input type="radio" id="q4a1" name="question4" value="Zalán futása">Zalán futása</li>
+                    <li><input type="radio" id="q4a2" name="question4" value="Képes Krónika">Képes Krónika</li>
+                    <li><input type="radio" id="q4a3" name="question4" value="Történeti Levelek">Történeti Levelek</li>
+                </ul>
+            </div>
+            <div class="question" data-correct="Zalán futás">
+                <p>Mi volt a címe első nyomtatásban megjelent művének?</p>
+                <input type="text" id="q5" name="question5" placeholder="Írd be a választ...">
+            </div>
+        </form>
+        <button type="button" onclick="checkAnswers()">Eredmény</button>
+        <div id="result"></div>
+    </div>
+    <script>
+        function checkAnswers() {
+            var correct = 0;
+            var total = 0;
+            var questions = document.querySelectorAll('.question');
+            var resultHTML = '';
+
+            questions.forEach((question) => {
+                var correctAnswer = question.getAttribute('data-correct');
+                var selectedAnswer = question.querySelector('input[name="question' + (total + 1) + '"]:checked');
+                total++;
+
+                if (selectedAnswer) {
+                    if (selectedAnswer.value === correctAnswer) {
+                        correct++;
+                        resultHTML += `<p class="correct">${question.innerText} - Helyes válasz: ${correctAnswer}</p>`;
+                    } else {
+                        resultHTML += `<p class="incorrect">${question.innerText} - Helytelen válasz! Helyes válasz: ${correctAnswer}</p>`;
+                    }
+                } else if (question.querySelector('input[type="text"]')) {
+                    var userAnswer = question.querySelector('input[type="text"]').value.trim().toLowerCase();
+                    var correctAnswerNormalized = correctAnswer.trim().toLowerCase();
+                    if (userAnswer === correctAnswerNormalized) {
+                        correct++;
+                        resultHTML += `<p class="correct">${question.innerText} - Helyes válasz: ${correctAnswer}</p>`;
+                    } else {
+                        resultHTML += `<p class="incorrect">${question.innerText} - Helytelen válasz! Helyes válasz: ${correctAnswer}</p>`;
+                    }
+                } else {
+                    resultHTML += `<p class="incorrect">${question.innerText} - Nincs válasz! Helyes válasz: ${correctAnswer}</p>`;
+                }
+            });
+
+            var resultText = `Helyes válaszok: ${correct} / ${total}`;
+            resultHTML = resultText + '<br>' + resultHTML;
+            document.getElementById('result').innerHTML = resultHTML;
+        }
+    </script>
+</body>
+</html>
